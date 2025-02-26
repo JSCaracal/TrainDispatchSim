@@ -8,7 +8,7 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Railway Dispatch Alpha 0.2", sf::Style::Close | sf::Style::Titlebar);
 	sf::Texture mainMenuBG;
 	sfrta::sfrta(WIDTH, HEIGHT);
-	Homescreen menu(window.getSize().x, window.getSize().y);
+	/*Homescreen menu(window.getSize().x, window.getSize().y);
 
 	while (window.isOpen()) {
 		window.setKeyRepeatEnabled(false);
@@ -47,6 +47,6 @@ int main() {
 		window.clear();
 		menu.draw(window);
 		window.display();
-	}
+	}*/
 	return 0;
 }

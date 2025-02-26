@@ -14,6 +14,11 @@ public:
 		vector<Signal>sigs_1 = CreateSignals(N_SEGS, 100);
 		vector<Signal>sigs_2 = CreateSignals(N_SEGS, 200);
 		vector<Train> traffic;
+		vector<TrackSwitch>ts_1;
+		TrackSwitch sw(1750.0 - (105.0 * 2), 100.0, "left");
+		TrackSwitch sw2(1750.0 - (105.0 * 4), 100.0, "right");
+		ts_1.push_back(sw);
+		ts_1.push_back(sw2);
 		Train amtrak = Train("Q844");
 		while (window.isOpen()) {
 			sf::Event event;
@@ -27,37 +32,68 @@ public:
 					switch (event.key.code) {
 						//This is a simulation of train movement
 					case sf::Keyboard::W:
-						for (Signal s : sigs_1) {
-							if (s.getTrack().hasTrain(amtrak)) {
-								if (s.isRed()) {
-									amtrak.setSig(true);
-								}
-								else {
-									amtrak.setSig(false);
-								}
-							}
+						if (amtrak.getAngle() != 0 && !amtrak.isRight()) {
+							amtrak.moveToLeft();
+							break;
 						}
-						amtrak.move();
-						break;
+						if(amtrak.getAngle()!= 0 && amtrak.isRight()) {
+							amtrak.moveToRight();
+							break;
+						}
+						for (int i = 0; i < ts_1.size(); i++) {
+							if (!amtrak.getCrossOver() && ts_1[i].isThrown()) {
+								//Movement thing
+								if (ts_1[i].isTop() && !amtrak.isRight()) {
+									ts_1[i].topMovement(&amtrak);
+								}
+								if (ts_1[i].isBottom() && amtrak.isRight()) {
+									ts_1[i].bottomMovement(&amtrak);
+								}
+							}							
+						}
+						if (!amtrak.getCrossOver()) {
+							amtrak.move();
+						}
+						
 					}
+					break;
 				case sf::Event::MouseButtonPressed:
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 						for (int i = 0; i < sigs_1.size(); i++) {
 							sigs_1[i].ChangeLight(sf::Mouse::getPosition(window));
 						}
+						for (int i = 0; i < ts_1.size(); i++) {
+							ts_1[i].throwSwitch(sf::Mouse::getPosition(window));
+
+						}
 					}
-
-				}
+				}					
 			}
+				for (Signal s : sigs_1) {
+					if (s.getTrack().hasTrain(amtrak)) {
+						if (s.isRed()) {
+							amtrak.setSig(true);
+						}
+						else {
+							amtrak.setSig(false);
+						}
+					}
+				}
+				for (int i = 0; i < ts_1.size(); i++) {
+					ts_1[i].trainDetect(amtrak);
+				}
 
-			window.clear(sf::Color(169, 169, 169));
-			DrawSignals(sigs_1, window);
-			DrawSignals(sigs_2, window);
-			CreateWorld(window);
-			amtrak.Draw(window);
-			window.display();
+				window.clear(sf::Color(169, 169, 169));
+				DrawTrackSwitches(ts_1, window);
+				DrawSignals(sigs_1, window);
+				DrawSignals(sigs_2, window);
+				DrawTrackSwitches(ts_1, window);
+				CreateWorld(window);
+				amtrak.Draw(window);
+				window.display();
+			}
 		}
-	}
+	
 	vector<Signal>CreateSignals(int track_num, int height) {
 		vector<Signal>sigs;
 		for (int i = 1; i <= track_num; i++) {
@@ -83,14 +119,18 @@ public:
 			t2.PlaceTrack(sf::Vector2f(1750 - ((len + 5) * x), 200));
 			t2.draw(window);
 		}
-		TrackSwitch sw(1500.0,110.0);
-		sw.draw(window);
 	}
 
 	void DrawSignals(vector<Signal> sigs, sf::RenderWindow& window) {
 		for (Signal s : sigs)
 		{
 			s.Draw(window);
+		}
+	}
+	void DrawTrackSwitches(vector<TrackSwitch> ts, sf::RenderWindow& window) {
+		for (TrackSwitch t : ts) {
+			t.draw(window);
+			t.debugDraw(window);
 		}
 	}
 };

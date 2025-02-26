@@ -42,11 +42,6 @@ public:
 		track.rotate(angle);
 	}
 
-
-	sf::Vector2f  GetCoords() {
-		return track.getPosition();
-	}
-
 	bool hasTrain(Train train) {
 		return this->track.getGlobalBounds().contains(train.getPosition());
 	}
@@ -54,4 +49,16 @@ public:
 	void  draw(sf::RenderWindow& window) {
 		window.draw(track);
 	}
+	void changeColor(sf::Color c) {
+		this->track.setFillColor(c);
+	}
+
+	sf::RectangleShape getShape() {
+		return this->track;
+	}
+	
+	sf::Vector2f  GetCoords() {
+		return track.getPosition();
+	}
+
 };
