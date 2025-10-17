@@ -5,16 +5,15 @@
 int main() {
 	const int WIDTH = 1750;
 	const int HEIGHT = WIDTH / 2.2;
-	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Railway Dispatch Alpha 0.2", sf::Style::Close | sf::Style::Titlebar);
+	sf::RenderWindow window(sf::VideoMode(sf::Vector2u(WIDTH, HEIGHT)), "Railway Dispatch Alpha 0.2", sf::Style::Close | sf::Style::Titlebar);
 	sf::Texture mainMenuBG;
 	sfrta::sfrta(WIDTH, HEIGHT);
 	Homescreen menu(window.getSize().x, window.getSize().y);
 
 	while (window.isOpen()) {
 		window.setKeyRepeatEnabled(false);
-		sf::Event event;
-		while (window.pollEvent(event)) {
-			switch (event.type)
+		while (std::optional event = window.pollEvent()) {
+			switch (event->is<>)
 			{
 			case sf::Event::Closed:
 				window.close();

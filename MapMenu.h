@@ -13,9 +13,7 @@ private:
 	sf::Texture cfcrcTexture;
 	int mapSelection;
 	void  CreateMenu() {
-		if (!font.loadFromFile("entities/RubikMonoOne-Regular.ttf")) {
-			std::cout << "Missing font" << std::endl;
-		}
+		
 		mapText[0].setFont(font);
 		mapText[0].setFillColor(sf::Color::Blue);
 		mapText[0].setString("SFRTA");
@@ -23,25 +21,25 @@ private:
 
 		sfrtaTexture.loadFromFile("entities/sfrta.jpg");
 		mapImage[0].setTexture(sfrtaTexture);
-		mapImage[0].setPosition(100, 200);
-		mapImage[0].setScale(.6, .6);
-		mapText[0].setPosition(300, 700);
+		mapImage[0].setPosition(sf::Vector2f(100, 200));
+		mapImage[0].setScale(sf::Vector2f(.6, .6));
+		mapText[0].setPosition(sf::Vector2f(300, 700));
 		mapText[1].setFont(font);
 		mapText[1].setFillColor(sf::Color::White);
 		mapText[1].setString("CFCRC");
 		mapText[1].setCharacterSize(70);
-		mapText[1].setPosition(1100, 700);
+		mapText[1].setPosition(sf::Vector2f(1100, 700));
 
 		cfcrcTexture.loadFromFile("entities/CFCRC.jpg");
 		mapImage[1].setTexture(cfcrcTexture);
-		mapImage[1].setPosition(850, 200);
-		mapImage[1].scale(.6, .74);
+		mapImage[1].setPosition(sf::Vector2f(850, 200));
+		mapImage[1].scale(sf::Vector2f(.6, .74));
 
 		mapText[2].setFont(font);
 		mapText[2].setFillColor(sf::Color::White);
 		mapText[2].setString("Exit");
 		mapText[2].setCharacterSize(20);
-		mapText[2].setPosition(50, 10);
+		mapText[2].setPosition(sf::Vector2f(50, 10));
 	}
 
 	void  draw(sf::RenderWindow& window) {
@@ -75,7 +73,7 @@ private:
 		}
 	}
 public:
-	MapMenu(float x, float y) {
+	MapMenu(sf::Vector2f(float x, float y)) {
 		sf::RenderWindow mapSelect(sf::VideoMode(x, y), "Select Map");
 		CreateMenu();
 		mapSelection = 0;
